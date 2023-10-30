@@ -1,9 +1,8 @@
-const hre = require("hardhat");
 const { ethers } = require("hardhat");
 
 async function getBalance(address) {
-  const balanceBigInt = await hre.ethers.provider.getBalance(address);
-  return hre.ethers.utils.formatEther(balanceBigInt);
+  const balanceBigInt = await ethers.provider.getBalance(address);
+  return ethers.utils.formatEther(balanceBigInt);
 }
 
 async function consoleBalances(addresses) {
@@ -22,8 +21,8 @@ async function consoleMemos(memos) {
 }
 
 async function main() {
-  const [owner, from1, from2, from3] = await hre.ethers.getSigners();
-  const coffee = await hre.ethers.getContractFactory("main");
+  const [owner, from1, from2, from3] = await ethers.getSigners();
+  const coffee = await ethers.getContractFactory("main");
   const contract = await coffee.deploy(); // instance of contract
 
   await contract.deployed();
@@ -34,7 +33,7 @@ async function main() {
 
   await consoleBalances(addresses);
 
-  const amount = { value: hre.ethers.utils.parseEther("1") };
+  const amount = { value: ethers.utils.parseEther("1") };
   await contract.connect(from1).buyCoffee("from1", "Very nice Coffee", amount);
   await contract.connect(from2).buyCoffee("from2", "Very nice Coffee", amount);
   await contract.connect(from3).buyCoffee("from3", "Very nice Coffee", amount);
