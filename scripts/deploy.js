@@ -28,7 +28,12 @@ async function main() {
   await contract.waitForDeployment();
   console.log("Address of contract:", contract.target);
 
-  const addresses = [owner.address, from1.address];
+  const addresses = [
+    owner.address,
+    from1.address,
+    from2.address,
+    from3.address,
+  ];
   console.log("Before buying Coffee");
 
   await consoleBalances(addresses);
@@ -37,6 +42,12 @@ async function main() {
   await contract.connect(from1).buyCoffee("from1", "Very nice Coffee", amount);
   await contract.connect(from2).buyCoffee("from2", "Very nice Coffee", amount);
   await contract.connect(from3).buyCoffee("from3", "Very nice Coffee", amount);
+
+  console.log("after buying Coffee");
+  await consoleBalances(addresses);
+
+  const memos = await contract.getMemos();
+  consoleMemos(memos);
 }
 
 main().catch((error) => {
