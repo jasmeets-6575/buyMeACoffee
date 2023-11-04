@@ -1,14 +1,14 @@
 const { ethers } = require("hardhat");
 
-async function getBalance(address) {
+async function getBalances(address) {
   const balanceBigInt = await ethers.provider.getBalance(address);
-  return ethers.utils.formatEther(balanceBigInt);
+  return ethers.formatEther(balanceBigInt);
 }
 
 async function consoleBalances(addresses) {
   let counter = 0;
   for (const address of addresses) {
-    console.log(`Address ${counter} balance:`, await getBalance(address));
+    console.log(`Address ${counter} balance:`, await getBalances(address));
     counter++;
   }
 }
@@ -22,18 +22,18 @@ async function consoleMemos(memos) {
 
 async function main() {
   const [owner, from1, from2, from3] = await ethers.getSigners();
-  const coffee = await ethers.getContractFactory("main");
-  const contract = await coffee.deploy(); // instance of contract
+  const coffee = await ethers.getContractFactory("Chai");
+  const contract = await ethers.deployContract("Chai"); // instance of contract
 
-  await contract.deployed();
-  console.log("Address of contract:", contract.address);
+  await contract.waitForDeployment();
+  console.log("Address of contract:", contract.target);
 
   const addresses = [owner.address, from1.address];
   console.log("Before buying Coffee");
 
   await consoleBalances(addresses);
 
-  const amount = { value: ethers.utils.parseEther("1") };
+  const amount = { value: ethers.parseEther("1") };
   await contract.connect(from1).buyCoffee("from1", "Very nice Coffee", amount);
   await contract.connect(from2).buyCoffee("from2", "Very nice Coffee", amount);
   await contract.connect(from3).buyCoffee("from3", "Very nice Coffee", amount);
