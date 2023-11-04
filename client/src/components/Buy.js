@@ -22,7 +22,9 @@ const Buy = ({ state }) => {
         <label htmlFor="">Message</label>
         <input type="text" id="message" placeholder="Enter Your Message" />
 
-        <button type="submit">Pay</button>
+        <button type="submit" disabled={!state.contract}>
+          Pay
+        </button>
       </form>
     </>
   );

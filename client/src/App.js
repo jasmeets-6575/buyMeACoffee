@@ -10,6 +10,7 @@ function App() {
     signer: null,
     contract: null,
   });
+  const [account, setAccount] = useState("none");
 
   useEffect(() => {
     const connectWallet = async () => {
@@ -21,16 +22,28 @@ function App() {
           const account = await ethereum.request({
             method: "eth_requestAccounts",
           });
-        }
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(
-          contractAddress,
-          contractABI,
-          signer
-        );
 
-        setState({ provider, signer, contract });
+          window.ethereum.on("chainChanged", () => {
+            window.location.reload();
+          });
+
+          window.ethereum.on("accountsChanged", () => {
+            window.location.reload();
+          });
+
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(
+            contractAddress,
+            contractABI,
+            signer
+          );
+
+          setAccount(account);
+          setState({ provider, signer, contract });
+        } else {
+          alert("Please install metamask");
+        }
       } catch (error) {
         console.log("Contract error is ", error);
       }
@@ -40,6 +53,7 @@ function App() {
 
   return (
     <main>
+      <p>Connected Account - {account}</p>
       <Buy state={state} />
       <Memos state={state} />
     </main>

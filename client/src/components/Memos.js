@@ -21,7 +21,7 @@ const Memos = ({ state }) => {
               <tr>
                 <td>{memo.name}</td>
                 <td>{memo.message}</td>
-                <td>{String(memo.timestamp)}</td>
+                <td>{new Date(memo.timestamp * 1000).toLocaleString()}</td>
                 <td>{memo.from}</td>
               </tr>
             </tbody>
