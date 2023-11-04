@@ -1,6 +1,8 @@
 import abi from "./contracts/Chai.json";
-import { ethers } from "ethers";
+import { ethers } from "hardhat";
 import { useState, useEffect } from "react";
+import Buy from "./components/Buy";
+import Memos from "./components/Memos";
 
 function App() {
   const [state, setState] = useState({
@@ -33,8 +35,15 @@ function App() {
         console.log("Contract error is ", error);
       }
     };
+    connectWallet();
   }, []);
-  return <h2>Hello world</h2>;
+
+  return (
+    <main>
+      <Buy state={state} />
+      <Memos />
+    </main>
+  );
 }
 
 export default App;
